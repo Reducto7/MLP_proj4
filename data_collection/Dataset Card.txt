@@ -1,0 +1,120 @@
+# 📄 **Dataset Card: NASDAQ (^IXIC) Daily Market Dataset (2020–2025)**
+
+## **1. Dataset Overview**
+
+This dataset consists of historical **NASDAQ Composite Index (^IXIC)** daily market data from **January 1, 2020 to January 1, 2025**.
+The data was retrieved using the `yfinance` Python library, which sources market information from Yahoo Finance for educational and research purposes.
+
+This dataset is used for the Bonus component of Team Project 4 to build a cross-market financial time-series prediction model outside the S&P 500 market.
+
+---
+
+## **2. Source Information**
+
+* **Provider:** Yahoo Finance
+* **Access Method:** `yfinance.download()`
+* **Ticker Symbol:** `^IXIC`
+* **License & Usage:** Publicly available for non-commercial, educational use
+* **robots.txt Compliance:** The `yfinance` API complies with Yahoo Finance’s access policy
+* **Date Range:** **2020-01-01 to 2025-01-01**
+
+---
+
+## **3. Data Collection Method**
+
+The dataset was collected programmatically using the following reproducible Python code:
+
+```python
+import yfinance as yf
+
+nasdaq = yf.download("^IXIC",
+                     start="2020-01-01",
+                     end="2025-01-01")
+
+nasdaq["return"] = nasdaq["Close"].pct_change()
+nasdaq = nasdaq.dropna()
+
+nasdaq.to_csv("nasdaq_dataset.csv")
+```
+
+This ensures transparency and full reproducibility for team members and instructors.
+
+---
+
+## **4. Dataset Structure and Features**
+
+The downloaded dataset contains the following columns:
+
+| Column        | Description                                      |
+| ------------- | ------------------------------------------------ |
+| **Date**      | Trading date (index)                             |
+| **Open**      | Opening price                                    |
+| **High**      | Highest price of the day                         |
+| **Low**       | Lowest price of the day                          |
+| **Close**     | Closing price                                    |
+| **Adj Close** | Adjusted closing price (split/dividend adjusted) |
+| **Volume**    | Total trading volume                             |
+| **return**    | Daily return computed as `Close.pct_change()`    |
+
+These features support downstream tasks such as return prediction, volatility estimation, and backtesting.
+
+---
+
+## **5. Preprocessing Steps**
+
+The following preprocessing steps were applied:
+
+1. **Sorting and formatting by date**
+2. **Daily return calculation**
+
+   ```python
+   nasdaq["return"] = nasdaq["Close"].pct_change()
+   ```
+3. **Removal of NaN rows** (typically the first return value)
+4. **Final Dataset Size:**
+
+   * Approximately 1,250 trading days (5 years × ~252 trading days per year)
+
+---
+
+## **6. Intended Use in the Project**
+
+This dataset is used to:
+
+* Build a daily return prediction model for the NASDAQ market
+* Compare cross-market performance against the S&P 500 model
+* Generate cumulative return plots for the Appendix
+* Analyze volatility and drawdown behaviors
+* Fulfill the **Bonus Extension (+20%)** requirement of Team Project 4
+
+It supports the project goals related to:
+
+* Cross-market evaluation
+* Sharpe-variant assessment
+* Volatility constraint analysis
+
+---
+
+## **7. Known Limitations**
+
+* Index volume from Yahoo Finance may be aggregated or synthetic
+* No trading on weekends and holidays → natural missing dates
+* Does not include macroeconomic variables (e.g., interest rates, VIX, sentiment)
+* Provides only daily-level prices, not intraday or tick data
+
+---
+
+## **8. Ethical & Legal Considerations**
+
+* Data is strictly for academic and research purposes
+* Must comply with Yahoo Finance Terms of Service
+* Not to be used for real-world investment or financial decisions
+* Contains no personal or sensitive information
+
+---
+
+
+
+
+
+
